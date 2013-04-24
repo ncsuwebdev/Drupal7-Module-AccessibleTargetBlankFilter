@@ -8,6 +8,13 @@
  * The text to be displayed can be changed via the filter settings form
  */
 
+function accessibletargetblankfilter_init() {
+    
+    drupal_add_css(drupal_get_path('module', 'accessibletargetblankfilter') . '/accessibletargetblankfilter.css');
+    drupal_add_js(drupal_get_path('module', 'accessibletargetblankfilter') . '/accessibletargetblankfilter.js', 'module', 'header', TRUE);
+    
+}
+
 function accessibletargetblank_getDefaultText() {
     return 'This link will open in a new window';
 }
@@ -46,10 +53,6 @@ function accessibletargetblankfilter_filter($op, $delta = 0, $format = -1, $text
       $textToAdd = variable_get('accessibletargetblankfilter_texttoadd', accessibletargetblank_getDefaultText());
       $pattern = '~<a\s++[^>]*?\btarget\s*+=\s*+([\'"])_blank\1[^>]*+>\K((?:[^<]++|<++(?!/a>))*+)~is';
       $text = preg_replace($pattern, "$2<span class=\"linkTargetBlank\">" . $textToAdd . "</span>", $text);
-      
-      $path = drupal_get_path('module', 'accessibletargetblankfilter');
-      drupal_add_js($path .'/accessibletargetblankfilter.js', 'module', 'header', FALSE);
-      drupal_add_css($path .'/accessibletargetblankfilter.css', 'all');
       
       return $text;
 

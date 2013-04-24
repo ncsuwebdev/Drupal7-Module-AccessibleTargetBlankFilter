@@ -16,7 +16,6 @@ jQuery(document).ready(function() {
             $(this).attr('title', 'Link to ' + $(this).attr('href'));
         }
         
-        
     });
     
     // add class to all target="_blank" links
