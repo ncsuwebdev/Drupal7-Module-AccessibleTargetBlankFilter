@@ -1,0 +1,8 @@
+; based on Mark Shropshire's Highlight Text Filter: http://drupalcode.org/project/highlight_filter.git
+
+name = Accessible Target Blank Filter
+description = "An input filter for making blank target links more accessible."
+core = 6.x
+version = 6.x-1.0
+dependencies[] = filter
+package = Input filters

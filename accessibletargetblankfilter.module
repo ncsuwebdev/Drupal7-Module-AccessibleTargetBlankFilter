@@ -1,0 +1,92 @@
+<?php
+/**
+ * @file
+ * Provides the ability for a link tags with target="_blank" to be 
+ * automatically converted to a more accessible format, by alerting users via 
+ * the use of text that the link will open in a new window.
+ *
+ * The text to be displayed can be changed via the filter settings form
+ */
+
+function accessibletargetblank_getDefaultText() {
+    return 'This link will open in a new window';
+}
+
+/**
+ * Implementation of hook_filter_tips().
+ */
+function accessibletargetblankfilter_filter_tips($delta, $format, $long = FALSE) {
+  $textToAdd = variable_get('accessibletargetblankfilter_texttoadd', accessibletargetblank_getDefaultText());
+  
+  if ($long) {
+    return t('Text to be added to the link tag to denote that it will open in a new window. The current text is ' . $textToAdd);
+  }
+  else {
+    return t('Text to be added to the link tag to denote that it will open in a new window. The current text is ' . $textToAdd);
+  }
+}
+
+/**
+ * Implementation of hook_filter().
+ */
+function accessibletargetblankfilter_filter($op, $delta = 0, $format = -1, $text = '') {
+  
+    switch ($op) {
+    case 'list':
+      return array(0 => t('Accessible Target Blank Filter'));
+
+    case 'description':
+      $textToAdd = variable_get('accessibletargetblankfilter_texttoadd', accessibletargetblank_getDefaultText());
+      return t('Text to be added to the link tag to denote that it will open in a new window. The current text is ' . $textToAdd);
+
+    case 'settings':
+      return _accessibletargetblankfilter_settings();
+
+    case 'process':
+      $textToAdd = variable_get('accessibletargetblankfilter_texttoadd', accessibletargetblank_getDefaultText());
+      $pattern = '~<a\s++[^>]*?\btarget\s*+=\s*+([\'"])_blank\1[^>]*+>\K((?:[^<]++|<++(?!/a>))*+)~is';
+      $text = preg_replace($pattern, "$2<span class=\"linkTargetBlank\">" . $textToAdd . "</span>", $text);
+      
+      $path = drupal_get_path('module', 'accessibletargetblankfilter');
+      drupal_add_js($path .'/accessibletargetblankfilter.js', 'module', 'header', FALSE);
+      drupal_add_css($path .'/accessibletargetblankfilter.css', 'all');
+      
+      return $text;
+
+    default:
+      return $text;
+  }
+}
+
+/**
+ * Processes highlight by adding span tag.
+ */
+/*
+function accessibletargetblankfilter_process($text) {
+  $textToAdd = variable_get('accessibletargetblankfilter_texttoadd', accessibletargetblank_getDefaultText());
+  return '<span class="linkTargetBlankParent">' . $text . ' </span><span class="linkTargetBlank">(' . $textToAdd . ')</span>';
+}
+ */
+
+/**
+ * The settings form for this filter. Default text is set as
+ * "This link will open in a new window"
+ * 
+ */
+function _accessibletargetblankfilter_settings() {
+  $form['accessibletargetblankfilter'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Accessible Target Blank Filter'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+  $form['accessibletargetblankfilter']['accessibletargetblankfilter_texttoadd'] = array(
+    '#title' => t('Text to Add'),
+    '#description' => t('Text to be added to the link tag to denote that it will open in a new window'),
+    '#type' => 'textfield',
+    '#required' => TRUE,
+    '#default_value' => variable_get('accessibletargetblankfilter_texttoadd', accessibletargetblank_getDefaultText()),
+  );
+  
+  return $form;
+}
