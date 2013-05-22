@@ -1,11 +1,10 @@
-Drupal 6 Input Filter that converts links with target="_blank" and no title 
+Drupal 7 Input Filter that converts links with target="_blank" and no title 
 attribute to a more accessible format.
 
 Source Code: 
-https://github.com/usaussie/drupal6-module-accessibletargetblankfilter
+https://github.com/ncsuwebdev/drupal7-module-accessibletargetblankfilter
 
-Credit: Based on Mark Shropshire's Highlight Text Filter: 
-http://drupalcode.org/project/highlight_filter.git
+Drupal 6 Version: https://github.com/ncsuwebdev/drupal6-module-accessibletargetblankfilter
 
 INSTALLATION AND USAGE INSTRUCTIONS
 

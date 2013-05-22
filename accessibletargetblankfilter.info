@@ -1,13 +1,11 @@
-; based on Mark Shropshire's Highlight Text Filter: http://drupalcode.org/project/highlight_filter.git
-
 name = Accessible Target Blank Filter
 description = "An input filter for making links with target=_blank and no title attribute more accessible."
-core = 6.x
-version = 6.x-1.0
+core = 7.x
+version = 7.x-1.0
 dependencies[] = filter
 package = Input filters
 
 ; for updates to the theme, specify features server location
 project status url = http://drupal.ncsu.edu/features/fserver
 
-; source code located at: https://github.com/ncsuwebdev/Drupal6-Module-AccessibleTargetBlankFilter
+; source code located at: https://github.com/ncsuwebdev/drupal7-module-accessibletargetblankfilter

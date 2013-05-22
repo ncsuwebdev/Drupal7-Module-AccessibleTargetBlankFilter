@@ -62,16 +62,6 @@ function accessibletargetblankfilter_filter($op, $delta = 0, $format = -1, $text
 }
 
 /**
- * Processes highlight by adding span tag.
- */
-/*
-function accessibletargetblankfilter_process($text) {
-  $textToAdd = variable_get('accessibletargetblankfilter_texttoadd', accessibletargetblank_getDefaultText());
-  return '<span class="linkTargetBlankParent">' . $text . ' </span><span class="linkTargetBlank">(' . $textToAdd . ')</span>';
-}
- */
-
-/**
  * The settings form for this filter. Default text is set as
  * "This link will open in a new window"
  * 
