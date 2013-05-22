@@ -9,3 +9,5 @@ package = Input filters
 
 ; for updates to the theme, specify features server location
 project status url = http://drupal.ncsu.edu/features/fserver
+
+; source code located at: https://github.com/ncsuwebdev/Drupal6-Module-AccessibleTargetBlankFilter
