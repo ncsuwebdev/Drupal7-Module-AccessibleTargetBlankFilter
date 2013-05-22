@@ -11,19 +11,43 @@
 function accessibletargetblankfilter_init() {
     
     drupal_add_css(drupal_get_path('module', 'accessibletargetblankfilter') . '/accessibletargetblankfilter.css');
-    drupal_add_js(drupal_get_path('module', 'accessibletargetblankfilter') . '/accessibletargetblankfilter.js', 'module', 'header', TRUE);
+    drupal_add_js(drupal_get_path('module', 'accessibletargetblankfilter') . '/accessibletargetblankfilter.js', 'file');
     
 }
 
-function accessibletargetblank_getDefaultText() {
+/*
+ * sets the default text that the filter will insert
+ * 
+ */
+
+function _accessibletargetblank_getDefaultText() {
     return 'This link will open in a new window';
 }
 
 /**
- * Implementation of hook_filter_tips().
+ * Implements hook_filter_info().
  */
-function accessibletargetblankfilter_filter_tips($delta, $format, $long = FALSE) {
-  $textToAdd = variable_get('accessibletargetblankfilter_texttoadd', accessibletargetblank_getDefaultText());
+function accessibletargetblankfilter_filter_info() {
+  
+  $filters['accessibletargetblankfilter'] = array(
+    'title' => t('Accessible Target Blank Filter'),
+    'description' => t('Converts links that open in a new window and that have no title attribute to a more accessible format'),
+    'process callback' => '_accessibletargetblankfilter_process',
+    'default settings' => array(
+      'accessibletargetblankfilter_texttoadd' => _accessibletargetblank_getDefaultText(),
+    ),
+    'settings callback' => '_accessibletargetblankfilter_settings',
+    'tips callback' => 'accessibletargetblankfilter_filter_tips',
+  );
+  return $filters;
+}
+
+/**
+ * Implements hook_filter_tips().
+ */
+function accessibletargetblankfilter_filter_tips($filter, $format, $long = FALSE) {
+  
+  $textToAdd = isset($filter->settings['accessibletargetblankfilter_texttoadd']) ? $filter->settings['accessibletargetblankfilter_texttoadd'] : accessibletargetblank_getDefaultText();
   
   if ($long) {
     return t('Text to be added to the link tag to denote that it will open in a new window. The current text is ' . $textToAdd);
@@ -34,52 +58,32 @@ function accessibletargetblankfilter_filter_tips($delta, $format, $long = FALSE)
 }
 
 /**
- * Implementation of hook_filter().
+ * Process function for the highlight filter.
  */
-function accessibletargetblankfilter_filter($op, $delta = 0, $format = -1, $text = '') {
+function _accessibletargetblankfilter_process($text, $filter) {
   
-    switch ($op) {
-    case 'list':
-      return array(0 => t('Accessible Target Blank Filter'));
-
-    case 'description':
-      $textToAdd = variable_get('accessibletargetblankfilter_texttoadd', accessibletargetblank_getDefaultText());
-      return t('Text to be added to the link tag to denote that it will open in a new window. The current text is ' . $textToAdd);
-
-    case 'settings':
-      return _accessibletargetblankfilter_settings();
-
-    case 'process':
-      $textToAdd = variable_get('accessibletargetblankfilter_texttoadd', accessibletargetblank_getDefaultText());
-      $pattern = '~<a\s++[^>]*?\btarget\s*+=\s*+([\'"])_blank\1[^>]*+>\K((?:[^<]++|<++(?!/a>))*+)~is';
-      $text = preg_replace($pattern, "$2<span class=\"linkTargetBlank\">" . $textToAdd . "</span>", $text);
-      
-      return $text;
-
-    default:
-      return $text;
-  }
+  $textToAdd = isset($filter->settings['accessibletargetblankfilter_texttoadd']) ? $filter->settings['accessibletargetblankfilter_texttoadd'] : accessibletargetblank_getDefaultText();
+  $pattern = '~<a\s++[^>]*?\btarget\s*+=\s*+([\'"])_blank\1[^>]*+>\K((?:[^<]++|<++(?!/a>))*+)~is';
+  
+  return preg_replace($pattern, "$2<span class=\"linkTargetBlankChild\">" . $textToAdd . "</span>", $text);
+  
 }
 
 /**
- * The settings form for this filter. Default text is set as
- * "This link will open in a new window"
- * 
+ * The settings form for filter.
+ *
+ * Default text is set above in the function... something like "This link will open in a new window"
  */
-function _accessibletargetblankfilter_settings() {
-  $form['accessibletargetblankfilter'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Accessible Target Blank Filter'),
-    '#collapsible' => TRUE,
-    '#collapsed' => FALSE,
-  );
-  $form['accessibletargetblankfilter']['accessibletargetblankfilter_texttoadd'] = array(
-    '#title' => t('Text to Add'),
+function _accessibletargetblankfilter_settings($form, &$form_state, $filter, $format, $defaults) {
+  $filter->settings += $defaults;
+
+  $settings['accessibletargetblankfilter_texttoadd'] = array(
+    '#title' => t('Text to add'),
     '#description' => t('Text to be added to the link tag to denote that it will open in a new window'),
     '#type' => 'textfield',
     '#required' => TRUE,
-    '#default_value' => variable_get('accessibletargetblankfilter_texttoadd', accessibletargetblank_getDefaultText()),
+    '#default_value' => isset($filter->settings['accessibletargetblankfilter_texttoadd']) ? $filter->settings['accessibletargetblankfilter_texttoadd'] : $defaults['accessibletargetblankfilter_texttoadd'],
   );
   
-  return $form;
+  return $settings;
 }

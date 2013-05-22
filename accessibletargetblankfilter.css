@@ -3,13 +3,13 @@
 ----------------------------------------------------------------------------------------------------------*/
 
 
-.linkTargetBlankParent .linkTargetBlank {
+.linkTargetBlankParent .linkTargetBlankChild {
     left: -999px;
     overflow: hidden;
     position: absolute;
     top: auto;
 }
-.linkTargetBlankParent:hover .linkTargetBlank, .linkTargetBlankParent:active .linkTargetBlank, .linkTargetBlankParent:focus .linkTargetBlank {
+.linkTargetBlankParent:hover .linkTargetBlankChild, .linkTargetBlankParent:active .linkTargetBlankChild, .linkTargetBlankParent:focus .linkTargetBlankChild {
     display: inline;
     position: absolute;
     left: inherit;

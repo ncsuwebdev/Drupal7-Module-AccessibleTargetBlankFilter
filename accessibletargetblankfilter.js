@@ -10,17 +10,17 @@
 jQuery(document).ready(function() {
     
     // check to see if there's a title attribute, and if not, set one
-    $("a").each(function(){
+    jQuery("a").each(function(){
         
-        if (!$(this).attr('title')) {
-            $(this).attr('title', 'Link to ' + $(this).attr('href'));
+        if (!jQuery(this).attr('title')) {
+            jQuery(this).attr('title', 'Link to ' + jQuery(this).attr('href'));
         }
         
     });
     
     // add class to all target="_blank" links
-    $("a[target=_blank]").each(function(index, el) { 
-        var el = $(el); 
+    jQuery("a[target=_blank]").each(function(index, el) { 
+        var el = jQuery(el); 
         el.addClass('linkTargetBlankParent');
     });
     
